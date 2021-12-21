@@ -20,7 +20,7 @@ from src.models.build_model import build_model
 from src.models import evaluate
 
 # define train log file
-sys.stdout = "../../log.txt"
+sys.stdout = open("../../log.txt", "w")
 
 
 def train(cfg, net, loader, eval_data, callbacks=tuple()):
