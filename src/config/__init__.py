@@ -9,6 +9,10 @@ from .eamc import defaults as eamc_defaults
 
 
 def parse_config_name_arg():
+    """
+    Returns: [str] the config name. such as mnist_contrast.
+
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config", dest="config_name", required=True)
     return parser.parse_known_args()[0].config_name
@@ -22,6 +26,14 @@ def set_cfg_value(cfg, key_list, value):
 
 
 def update_cfg(cfg):
+    """
+    command line args config is so tricky but not friendly.
+    Args:
+        cfg:
+
+    Returns:
+
+    """
     sep = "__"
     parser = argparse.ArgumentParser()
     cfg_dict = hparams_dict(cfg, sep=sep)
@@ -41,6 +53,12 @@ def update_cfg(cfg):
 
 
 def get_config_by_name(name):
+    """
+    Args:
+        name: [str] config name. such as mnist_contrast
+
+    Returns: [src.config.defaults.Experiment] experiment config
+    """
     try:
         if name.startswith("eamc"):
             cfg = getattr(eamc_experiments, name)
@@ -48,6 +66,7 @@ def get_config_by_name(name):
             cfg = getattr(experiments, name)
     except Exception as err:
         raise RuntimeError(f"Config not found: {name}") from err
+    # the number of cluster in the loss config is not initialized, here set up it.
     cfg.model_config.loss_config.n_clusters = cfg.model_config.cm_config.n_clusters
     return cfg
 
@@ -61,13 +80,26 @@ def get_config_from_file(name=None, tag=None, file_path=None, run=0):
 
 
 def get_experiment_config():
+    # parse the command line arguments
     name = parse_config_name_arg()
+    # get experiment config
     cfg = get_config_by_name(name)
     update_cfg(cfg)
     return name, cfg
 
 
 def _insert_hparams(cfg_dict, hp_dict, key_prefix, skip_keys, sep="/"):
+    """
+    Args:
+        cfg_dict:
+        hp_dict:
+        key_prefix:
+        skip_keys:
+        sep:
+
+    Returns:
+
+    """
     hparam_types = (str, int, float, bool)
     for key, value in cfg_dict.items():
         if key in skip_keys:

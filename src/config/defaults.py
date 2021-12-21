@@ -142,6 +142,13 @@ class CoMVC(Config):
 
 
 class Experiment(Config):
+    """
+    Experiment config contains the following config terms:
+      [dataset, model, times of train, train epoch, batch_size, number of epochs between model evaluation,
+       number of epochs between model checkpoints, patience for early stopping, size of evaluation samples,
+       term in loss function to use for model selection.]
+    """
+
     # Dataset config
     dataset_config: Dataset
     # Model config

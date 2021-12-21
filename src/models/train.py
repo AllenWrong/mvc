@@ -2,6 +2,8 @@ import wandb
 import torch as th
 import os
 import sys
+import time
+from torch.utils.data import DataLoader
 
 # ---- path preprocessing ----
 # current_path = "....\mvc\src\models\"
@@ -10,7 +12,6 @@ for i in range(2):
     parent_dir = os.path.dirname(parent_dir)
 sys.path.append(parent_dir)
 
-
 from src import config
 from src import helpers
 from src.data.load import load_dataset
@@ -18,28 +19,31 @@ from src.models import callback
 from src.models.build_model import build_model
 from src.models import evaluate
 
+# define train log file
+sys.stdout = "../../log.txt"
+
 
 def train(cfg, net, loader, eval_data, callbacks=tuple()):
     """
     Train the model for one run.
+    Args:
+        cfg: [src.config.defaults.Experiment] experiment config
+        net: model
+        loader: [th.utils.data.DataLoader] data loader
+        eval_data: [th.utils.data.DataLoader]  data loader for evaluation data
+        callbacks: [List] training callbacks
 
-    :param cfg: Experiment config
-    :type cfg: config.defaults.Experiment
-    :param net: Model
-    :type net:
-    :param loader: DataLoder for training data
-    :type loader:  th.utils.data.DataLoader
-    :param eval_data: DataLoder for evaluation data
-    :type eval_data:  th.utils.data.DataLoader
-    :param callbacks: Training callbacks.
-    :type callbacks: List
-    :return: None
-    :rtype: None
+    Returns: None
     """
+
+    # number of batches
     n_batches = len(loader)
     for e in range(1, cfg.n_epochs + 1):
+        print(f"-------- epoch: {e} --------")
+        start_time = time.time()
         iter_losses = []
         for i, data in enumerate(loader):
+            # batch is a list which contains one tensor X
             *batch, _ = data
             try:
                 batch_losses = net.train_step(batch, epoch=(e-1), it=i, n_batches=n_batches)
@@ -55,6 +59,9 @@ def train(cfg, net, loader, eval_data, callbacks=tuple()):
         except callback.StopTraining as err:
             print(err)
             break
+        end_time = time.time()
+        used_time = ("%.2fs") % (end_time - start_time)
+        print(used_time)
 
 
 def main():
@@ -63,7 +70,7 @@ def main():
     """
     experiment_name, cfg = config.get_experiment_config()
     dataset = load_dataset(**cfg.dataset_config.dict())
-    loader = th.utils.data.DataLoader(dataset, batch_size=int(cfg.batch_size), shuffle=True, num_workers=0,
+    loader = DataLoader(dataset, batch_size=int(cfg.batch_size), shuffle=True, num_workers=0,
                                       drop_last=True, pin_memory=False)
     eval_data = evaluate.get_eval_data(dataset, cfg.n_eval_samples, cfg.batch_size)
     experiment_identifier = wandb.util.generate_id()

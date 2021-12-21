@@ -1,5 +1,4 @@
+from src.config import get_config_by_name, update_cfg
 
-from src.data import load
-
-arr = load._load_npz("mnist_mv")
-print(arr.shape)
+cfg = get_config_by_name("mnist")
+update_cfg(cfg)
