@@ -19,7 +19,7 @@ from src.models import callback
 from src.models.build_model import build_model
 from src.models import evaluate
 
-# define train log file
+# define log output file
 sys.stdout = open("../../log.txt", "w")
 
 
