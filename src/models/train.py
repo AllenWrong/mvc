@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 
 # ---- path preprocessing ----
 # current_path = "....\mvc\src\models\"
-parent_dir = os.path.dirname(__file__)
+parent_dir = os.path.dirname(os.path.abspath(__file__))
 for i in range(2):
     parent_dir = os.path.dirname(parent_dir)
 sys.path.append(parent_dir)
@@ -20,7 +20,7 @@ from src.models.build_model import build_model
 from src.models import evaluate
 
 # define log output file
-sys.stdout = open("../../log.txt", "w")
+# sys.stdout = open("../../log.txt", "w")
 
 
 def train(cfg, net, loader, eval_data, callbacks=tuple()):

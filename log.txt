@@ -1,0 +1,106 @@
+CoMVC(
+  (backbones): Backbones(
+    (backbones): ModuleList(
+      (0): CNN(
+        (layers): ModuleList(
+          (0): Conv2d(1, 32, kernel_size=[5, 5], stride=(1, 1))
+          (1): ReLU()
+          (2): Conv2d(32, 32, kernel_size=[5, 5], stride=(1, 1))
+          (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (4): ReLU()
+          (5): MaxPool2d(kernel_size=[2, 2], stride=[2, 2], padding=0, dilation=1, ceil_mode=False)
+          (6): Conv2d(32, 32, kernel_size=[3, 3], stride=(1, 1))
+          (7): ReLU()
+          (8): Conv2d(32, 32, kernel_size=[3, 3], stride=(1, 1))
+          (9): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (10): ReLU()
+          (11): MaxPool2d(kernel_size=[2, 2], stride=[2, 2], padding=0, dilation=1, ceil_mode=False)
+          (12): Flatten()
+        )
+      )
+      (1): CNN(
+        (layers): ModuleList(
+          (0): Conv2d(1, 32, kernel_size=[5, 5], stride=(1, 1))
+          (1): ReLU()
+          (2): Conv2d(32, 32, kernel_size=[5, 5], stride=(1, 1))
+          (3): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (4): ReLU()
+          (5): MaxPool2d(kernel_size=[2, 2], stride=[2, 2], padding=0, dilation=1, ceil_mode=False)
+          (6): Conv2d(32, 32, kernel_size=[3, 3], stride=(1, 1))
+          (7): ReLU()
+          (8): Conv2d(32, 32, kernel_size=[3, 3], stride=(1, 1))
+          (9): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (10): ReLU()
+          (11): MaxPool2d(kernel_size=[2, 2], stride=[2, 2], padding=0, dilation=1, ceil_mode=False)
+          (12): Flatten()
+        )
+      )
+    )
+  )
+  (fusion): WeightedMean()
+  (projector): Identity()
+  (ddc): DDC(
+    (hidden): Sequential(
+      (0): Linear(in_features=288, out_features=100, bias=True)
+      (1): ReLU()
+      (2): BatchNorm1d(100, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (output): Sequential(
+      (0): Linear(in_features=100, out_features=10, bias=True)
+      (1): Softmax(dim=1)
+    )
+  )
+  (loss): Loss()
+)
+-------- epoch: 1 --------
+Key                        Value
+----------------------  --------
+params/fusion/weight_0  0.522918
+params/fusion/weight_1  0.477082
+epoch                   1 
+
+8.00s
+-------- epoch: 2 --------
+Key                        Value
+----------------------  --------
+params/fusion/weight_0  0.535798
+params/fusion/weight_1  0.464202
+epoch                   2 
+
+13.63s
+-------- epoch: 3 --------
+Key                        Value
+----------------------  --------
+params/fusion/weight_0  0.544958
+params/fusion/weight_1  0.455042
+epoch                   3 
+
+13.72s
+-------- epoch: 4 --------
+Key                     Value
+----------------------  -----------------------------------------------------
+eval_losses/ddc_1       0.07483751296997071
+eval_losses/ddc_2       0.10730368296305338
+eval_losses/ddc_3       0.5761182149251302
+eval_losses/tot         0.7582595316569011
+metrics/acc             0.7078666666666666
+metrics/cmat            [[5767    0   10    5    5    1  100    0   34    1]
+                         [   1 3321   71   16   17 3254   12   22    9   19]
+                         [   9    6 5639   14  132   10   47   54   43    4]
+                         [  28    0  264 5458   91    2   17   31  221   19]
+                         [  19    1   22    1 2737    1  127   35   11 2888]
+                         [  40    6   20 3355  106    6   71   13 1788   16]
+                         [  35    5    1    7    7    4 5806    0   51    2]
+                         [  11   14  339    4  160    8    0 5405   18  306]
+                         [  16   10   35   77   22    2   33    4 5535  117]
+                         [  62    5   73  139 2591    3    7  239   32 2798]]
+metrics/nmi             0.7436547865902902
+cluster_size/mean       5999.9990234375
+cluster_size/sd         1639.5169677734375
+params/fusion/weight_0  0.5527514219284058
+params/fusion/weight_1  0.44724857807159424
+epoch                   4 
+
+Model successfully saved: /home/xuezhe/guanzc/mvc/models/mnist-4576f8jc/run-0/best.pt
+17.02s
+-------- epoch: 5 --------
